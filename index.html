@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccuWeather - Home</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body> <!--For setting default mode as light, type as ' <body class="light-mode"> '-->
+    <div class="toggle-container">
+        <input type="checkbox" id="mode-toggle"> <!--add 'checked' beside 'mode-toggle' for light mode, type as ' id="mode-toggle" checked '-->
+        <label for="mode-toggle" class="toggle-switch">
+            <span class="icon sun">🌕</span>
+            <span class="icon moon">🌑</span>
+            <span class="slider"></span>
+        </label>
+    </div>
 
+    <div id="weather-container">
+        <h2>AccuWeather🌤️</h2>
+        <input type="text" id="city" placeholder="Enter a city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <img id="weather-icon" alt="Weather Icon">
+        
+        <div id="temp-div"></div>
+        <div id="weather-info"></div>
+        <div id="hourly-forecast"></div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
