@@ -1,1 +1,196 @@
+:root {
+    --bg-color: #20232a;
+    /*--text-color: white;*/
+    --text-color: black;
+    --input-bg: white;
+    --input-text: black;
+    /*--button-bg: white;
+    --button-text: black;*/
+    --button-bg: black;
+    --button-text: white;
 
+    /*Dark mode - Dark container*/
+    /*--container-bg: rgba(255, 255, 255, 0.1);
+    --container-border: rgba(255, 255, 255, 0.1);*/
+    /*Dark mode - Light container*/
+    --container-bg: #FAD5A5;
+    --container-border: #FAD5A5;
+}
+
+body.light-mode {
+    --bg-color: #FAD5A5;
+    /*--text-color: black;*/
+    --text-color: white;
+    --input-bg: rgb(255, 255, 255);
+    --input-text: rgb(0, 0, 0);
+    /*--button-bg: black;
+    --button-text: white;*/
+    --button-bg: white;
+    --button-text: black;
+
+    /*Light mode - Light container*/
+    /*--container-bg: rgba(0, 0, 0, 0.2);
+    --container-border: rgba(0, 0, 0, 0.2);*/
+    /*Light mode - Dark container*/
+    --container-bg: #20232a;
+    --container-border: #20232a;
+}
+
+body {
+    background: var(--bg-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    color: var(--text-color);
+    transition: background 0.4s, color 0.4s;
+}
+
+#weather-container {
+    /*background: rgba(255, 255, 255, 0.08);*/          /*Light, Light and Dark, Dark*/
+    background: var(--container-bg);          /*Light, Dark and Dark, Light*/
+    max-width: 350px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    /*transition: background 0.4s, border 0.4s;*/
+}
+
+h2, label, p {
+    color: var(--text-color);
+    margin: 8px 0;
+}
+
+input {
+    width: calc(100% - 16px);
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid white;
+    margin-top: 20px;
+    background: var(--input-bg);
+    color: var(--input-text);
+    transition: background 0.3s, color 0.3s;
+}
+
+button {
+    background: var(--button-bg);
+    color: var(--button-text);
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 30px;
+    width: 110px;
+    font-size: 13px;
+    transition: background 0.3s, color 0.3s;
+}
+
+button:hover {
+    background: var(--button-bg);
+}
+
+#temp-div p {
+    font-size: 60px;
+    margin-top: -30px;
+}
+
+#weather-info {
+    font-size: 20px;
+}
+
+#weather-icon {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 10px;
+    margin-bottom: 0;
+    display: none;
+}
+
+#hourly-forecast {
+    margin-top: 50px;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hourly-item {
+    flex: 0 0 auto;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+    color: var(--text-color);
+}
+
+.hourly-item img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+#hourly-heading {
+    color: var(--text-color);
+    margin-top: 10px;
+}
+
+/* Toggle Switch */
+.toggle-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+#mode-toggle {
+    display: none;
+}
+.toggle-switch {
+    width: 60px;
+    height: 30px;
+    background: #ddd;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    padding: 5px;
+    box-sizing: border-box;
+    transition: background 0.3s;
+}
+.slider {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+    top: 1px;
+    left: 1px;
+    transition: transform 0.3s;
+    z-index: 2;
+}
+.icon {
+    z-index: 1;
+    font-size: 14px;
+    width: 50%;
+    text-align: center;
+    pointer-events: none;
+    color: black;
+}
+.sun {
+    position: absolute;
+    left: 6px;
+}
+.moon {
+    position: absolute;
+    right: 6px;
+}
+#mode-toggle:checked + .toggle-switch .slider {
+    transform: translateX(30px);
+}
