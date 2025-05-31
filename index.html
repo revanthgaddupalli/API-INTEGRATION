@@ -8,7 +8,7 @@
 </head>
 <body> <!--For setting default mode as light, type as ' <body class="light-mode"> '-->
     <div class="toggle-container">
-        <input type="checkbox" id="mode-toggle"> <!--add 'checked' beside 'mode-toggle' for light mode, type as ' id="mode-toggle" checked '-->
+        <input type="checkbox" id="mode-toggle"> <!--Add 'checked' beside 'mode-toggle' for light mode, type as ' id="mode-toggle" checked '-->
         <label for="mode-toggle" class="toggle-switch">
             <span class="icon sun">🌕</span>
             <span class="icon moon">🌑</span>
@@ -18,7 +18,8 @@
 
     <div id="weather-container">
         <h2>AccuWeather🌤️</h2>
-        <input type="text" id="city" placeholder="Enter a city name">
+        <input type="text" id="city" placeholder="Enter a city name" list="city-suggestions">
+        <datalist id="city-suggestions"></datalist>
         <button onclick="getWeather()">Get Weather</button>
         <img id="weather-icon" alt="Weather Icon">
         
