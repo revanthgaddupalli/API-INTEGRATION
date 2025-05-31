@@ -46,7 +46,7 @@ function displayWeather(data) {
     if (data.cod === 404 || data.cod === '404') {
         weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
     } else {
-        const cityName = data.name;
+        const cityName = `<strong>${data.name}, ${data.sys.country}</strong>`;
         const temperature = Math.round(data.main.temp);
         const description = data.weather[0].description;
         const iconCode = data.weather[0].icon;
@@ -93,7 +93,49 @@ function displayHourlyForecast(hourlyData) {
     });
 }
 
-// Dark/Light Theme Toggle
+const cityInput = document.getElementById('city');
+const suggestionsList = document.getElementById('city-suggestions');
+const apiKey = 'de67f813ac1a6ddb5fb9f4d60bce1d41'; // your existing OpenWeather API key
+
+let debounceTimeout;
+
+cityInput.addEventListener('input', function () {
+    clearTimeout(debounceTimeout);
+    const query = cityInput.value.trim();
+
+    if (query.length < 2) {
+        suggestionsList.innerHTML = '';
+        return;
+    }
+
+    debounceTimeout = setTimeout(() => {
+        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${apiKey}`)
+            .then(res => res.json())
+            .then(data => {
+                suggestionsList.innerHTML = '';
+                data.forEach(location => {
+                    const option = document.createElement('option');
+                    option.value = `${location.name}, ${location.country}`;
+                    suggestionsList.appendChild(option);
+                });
+            })
+            .catch(err => {
+                console.error('Error fetching city suggestions:', err);
+            });
+    }, 300);
+});
+
+// Theme Toggle
 document.getElementById('mode-toggle').addEventListener('change', function () {
     document.body.classList.toggle('light-mode');
+    localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+});
+
+// Get last saved theme on load/refresh
+window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('mode-toggle').checked = true;
+    }
 });
