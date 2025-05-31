@@ -1,17 +1,11 @@
 :root {
     --bg-color: #20232a;
-    /*--text-color: white;*/
     --text-color: black;
     --input-bg: white;
     --input-text: black;
-    /*--button-bg: white;
-    --button-text: black;*/
     --button-bg: black;
     --button-text: white;
 
-    /*Dark mode - Dark container*/
-    /*--container-bg: rgba(255, 255, 255, 0.1);
-    --container-border: rgba(255, 255, 255, 0.1);*/
     /*Dark mode - Light container*/
     --container-bg: #FAD5A5;
     --container-border: #FAD5A5;
@@ -19,18 +13,12 @@
 
 body.light-mode {
     --bg-color: #FAD5A5;
-    /*--text-color: black;*/
     --text-color: white;
     --input-bg: rgb(255, 255, 255);
     --input-text: rgb(0, 0, 0);
-    /*--button-bg: black;
-    --button-text: white;*/
     --button-bg: white;
     --button-text: black;
 
-    /*Light mode - Light container*/
-    /*--container-bg: rgba(0, 0, 0, 0.2);
-    --container-border: rgba(0, 0, 0, 0.2);*/
     /*Light mode - Dark container*/
     --container-bg: #20232a;
     --container-border: #20232a;
@@ -49,16 +37,14 @@ body {
 }
 
 #weather-container {
-    /*background: rgba(255, 255, 255, 0.08);*/          /*Light, Light and Dark, Dark*/
-    background: var(--container-bg);          /*Light, Dark and Dark, Light*/
+    background: var(--container-bg);  /*Light, Dark and Dark, Light*/
     max-width: 350px;
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--container-border);
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     text-align: center;
-    /*transition: background 0.4s, border 0.4s;*/
 }
 
 h2, label, p {
