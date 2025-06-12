@@ -1,17 +1,4 @@
 :root {
-    --bg-color: #20232a;
-    --text-color: black;
-    --input-bg: white;
-    --input-text: black;
-    --button-bg: black;
-    --button-text: white;
-
-    /*Dark mode - Light container*/
-    --container-bg: #FAD5A5;
-    --container-border: #FAD5A5;
-}
-
-body.light-mode {
     --bg-color: #FAD5A5;
     --text-color: white;
     --input-bg: rgb(255, 255, 255);
@@ -22,6 +9,19 @@ body.light-mode {
     /*Light mode - Dark container*/
     --container-bg: #20232a;
     --container-border: #20232a;
+}
+
+body.dark-mode {
+    --bg-color: #20232a;
+    --text-color: black;
+    --input-bg: white;
+    --input-text: black;
+    --button-bg: black;
+    --button-text: white;
+
+    /*Dark mode - Light container*/
+    --container-bg: #FAD5A5;
+    --container-border: #FAD5A5;
 }
 
 body {
@@ -127,19 +127,19 @@ button:hover {
   top: 20px;
   right: 20px;
   padding: 8px 14px;
-  background-color: #20232a;
-  color: #fff;
+  background-color: #FAD5A5;
+  color: #000;
   font-size: 14px;
   font-weight: bold;
-  border: 2px solid #FAD5A5;
+  border: 2px solid #20232a;
   border-radius: 20px;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
   z-index: 10;
 }
 
-body.light-mode .theme-toggle {
-  background-color: #FAD5A5;
-  color: #000;
-  border: 2px solid #20232a;
+body.dark-mode .theme-toggle {
+  background-color: #20232a;
+  color: #fff;
+  border: 2px solid #FAD5A5;
 }
