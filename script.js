@@ -125,17 +125,24 @@ cityInput.addEventListener('input', function () {
     }, 300);
 });
 
-// Theme Toggle
-document.getElementById('mode-toggle').addEventListener('change', function () {
-    document.body.classList.toggle('light-mode');
-    localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+function updateThemeText() {
+  const isDark = document.body.classList.contains('dark-mode');
+  themeToggleBtn.textContent = isDark ? 'Switch to Light ☀️' : 'Switch to Dark 🌑';
+}
+
+themeToggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+  localStorage.setItem('theme', theme);
+  updateThemeText();
 });
 
-// Get last saved theme on load/refresh
 window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-        document.body.classList.add('light-mode');
-        document.getElementById('mode-toggle').checked = true;
-    }
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
+  updateThemeText();
 });
