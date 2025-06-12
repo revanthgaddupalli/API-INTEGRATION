@@ -25,15 +25,15 @@ body.light-mode {
 }
 
 body {
-    background: var(--bg-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    color: var(--text-color);
-    transition: background 0.4s, color 0.4s;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  transition: background 0.4s, color 0.4s;
 }
 
 #weather-container {
@@ -122,61 +122,24 @@ button:hover {
     margin-bottom: 5px;
 }
 
-#hourly-heading {
-    color: var(--text-color);
-    margin-top: 10px;
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  background-color: #20232a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  border: 2px solid #FAD5A5;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  z-index: 10;
 }
 
-/* Toggle Switch */
-.toggle-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
-}
-#mode-toggle {
-    display: none;
-}
-.toggle-switch {
-    width: 60px;
-    height: 30px;
-    background: #ddd;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    padding: 5px;
-    box-sizing: border-box;
-    transition: background 0.3s;
-}
-.slider {
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    background: white;
-    border-radius: 50%;
-    top: 1px;
-    left: 1px;
-    transition: transform 0.3s;
-    z-index: 2;
-}
-.icon {
-    z-index: 1;
-    font-size: 14px;
-    width: 50%;
-    text-align: center;
-    pointer-events: none;
-    color: black;
-}
-.sun {
-    position: absolute;
-    left: 6px;
-}
-.moon {
-    position: absolute;
-    right: 6px;
-}
-#mode-toggle:checked + .toggle-switch .slider {
-    transform: translateX(30px);
+body.light-mode .theme-toggle {
+  background-color: #FAD5A5;
+  color: #000;
+  border: 2px solid #20232a;
 }
