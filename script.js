@@ -129,7 +129,7 @@ const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
 function updateThemeText() {
   const isDark = document.body.classList.contains('dark-mode');
-  themeToggleBtn.textContent = isDark ? 'Switch to Light ☀️' : 'Switch to Dark 🌑';
+  themeToggleBtn.textContent = isDark ? '☀️ Light' : '🌑 Dark';
 }
 
 themeToggleBtn.addEventListener('click', () => {
