@@ -16,7 +16,7 @@ body.dark-mode {
     --text-color: black;
     --input-bg: white;
     --input-text: black;
-    --button-bg: black;
+    --button-bg: #20232a;
     --button-text: white;
 
     /*Dark mode - Light container*/
