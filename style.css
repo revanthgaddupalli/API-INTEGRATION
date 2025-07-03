@@ -5,23 +5,8 @@
     --input-text: rgb(0, 0, 0);
     --button-bg: white;
     --button-text: black;
-
-    /*Light mode - Dark container*/
     --container-bg: #20232a;
-    --container-border: #20232a;
-}
-
-body.dark-mode {
-    --bg-color: #20232a;
-    --text-color: black;
-    --input-bg: white;
-    --input-text: black;
-    --button-bg: #20232a;
-    --button-text: white;
-
-    /*Dark mode - Light container*/
-    --container-bg: #FAD5A5;
-    --container-border: #FAD5A5;
+    --hourly-border-color: #ffffff4d;
 }
 
 body {
@@ -31,16 +16,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   transition: background 0.4s, color 0.4s;
+  padding: 1px;
 }
 
 #weather-container {
-    background: var(--container-bg);  /*Light, Dark and Dark, Light*/
+    background: var(--container-bg);
     max-width: 350px;
     padding: 20px;
-    border: 1px solid var(--container-border);
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
@@ -68,78 +53,159 @@ button {
     background: var(--button-bg);
     color: var(--button-text);
     padding: 10px;
-    border: none;
     border-radius: 10px;
     cursor: pointer;
-    margin-top: 30px;
+    margin-top: 20px;
     width: 110px;
     font-size: 13px;
     transition: background 0.3s, color 0.3s;
 }
 
-button:hover {
-    background: var(--button-bg);
-}
-
-#temp-div p {
-    font-size: 60px;
-    margin-top: -30px;
-}
-
-#weather-info {
-    font-size: 20px;
+button:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 8px #000;
 }
 
 #weather-icon {
     width: 200px;
     height: 200px;
     margin: 0 auto 10px;
-    margin-bottom: 0;
+    margin-top: -10px;
     display: none;
 }
 
-#hourly-forecast {
-    margin-top: 50px;
-    overflow-x: auto;
-    white-space: nowrap;
-    display: flex;
-    justify-content: space-between;
+#temp-div p {
+    font-size: 60px;
+    margin-top: -40px;
 }
 
-.hourly-item {
-    flex: 0 0 auto;
-    width: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 10px;
+#weather-info {
+    font-size: 20px;
+}
+
+.flip-container {
+  perspective: 1000px;
+  width: 350px;
+  height: auto;
+  height: 675px;
+  position: relative;
+}
+
+.flipper {
+  width: 100%;
+  height: auto;
+  min-height: 675px;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease-in-out;
+}
+
+.flipped .flipper {
+    transform: rotateY(180deg);
+}
+
+.front, .back {
+    position: absolute;
+    width: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    background: var(--container-bg);
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     color: var(--text-color);
 }
 
-.hourly-item img {
+.front {
+  z-index: 2;
+}
+
+.back {
+  transform: rotateY(180deg);
+  position: absolute;
+  top: 0;
+  right: 5%;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  background: var(--container-bg);
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: var(--text-color);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#hourly-forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.hourly-grid-item {
+    text-align: center;
+    border: 1px solid var(--hourly-border-color);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.hourly-grid-item img {
     width: 30px;
     height: 30px;
-    margin-bottom: 5px;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 8px 14px;
-  background-color: #FAD5A5;
-  color: #000;
-  font-size: 14px;
-  font-weight: bold;
-  border: 2px solid #20232a;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background 0.3s, color 0.3s;
-  z-index: 10;
-}
+@media (max-width: 400px) {
+    body {
+        align-items: flex-start;
+        padding: 20px;
+        min-height:auto;
+    }
 
-body.dark-mode .theme-toggle {
-  background-color: #20232a;
-  color: #fff;
-  border: 2px solid #FAD5A5;
+    #weather-container,
+    .flip-container {
+        width: 100%;
+        max-width: 320px;
+        padding: 15px;
+    }
+
+    #weather-icon {
+        width: 120px;
+        height: 120px;
+    }
+
+    input {
+        font-size: 14px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .hourly-grid-item {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #temp-div p {
+        font-size: 48px;
+        margin-top: -20px;
+    }
+
+    #weather-info {
+        font-size: 18px;
+    }
+
+    .front, .back {
+        padding: 15px;
+    }
+
+    .flipper {
+        min-height: 625px;
+    }
+
+    .flip-container {
+        height: 625px;
+    }
 }
