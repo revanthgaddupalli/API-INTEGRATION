@@ -1,9 +1,37 @@
+const apiKey = 'de67f813ac1a6ddb5fb9f4d60bce1d41';
+let weatherLoaded = false;
+
+window.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') 
+        getWeather();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.flip-container');
+    container.addEventListener('click', function (e) {
+        const target = e.target;
+        if (target.tagName === 'INPUT' || target.tagName === 'BUTTON') return;
+        if (!weatherLoaded) return;
+        container.classList.toggle('flipped');
+    });
+});
+
 function getWeather() {
-    const apiKey = 'de67f813ac1a6ddb5fb9f4d60bce1d41';
     const city = document.getElementById('city').value.trim();
+    const tempDivInfo = document.getElementById('temp-div');
+    const weatherInfoDiv = document.getElementById('weather-info');
+    const weatherIcon = document.getElementById('weather-icon');
+    const hourlyForecastGrid = document.getElementById('hourly-forecast-grid');
+
+    // Clear previous data
+    tempDivInfo.innerHTML = '';
+    weatherInfoDiv.innerHTML = '';
+    weatherIcon.style.display = 'none';
+    hourlyForecastGrid.innerHTML = '';
+    weatherLoaded = false;
 
     if (!city) {
-        alert('Please enter a city');
+        weatherInfoDiv.innerHTML = `<p>Please enter a city name.</p>`;
         return;
     }
 
@@ -13,21 +41,22 @@ function getWeather() {
     fetch(currentWeatherUrl)
         .then(response => response.json())
         .then(data => {
+            if (data.cod !== 200) {
+                weatherInfoDiv.innerHTML = `<p>${data.message || 'City not found'}</p>`;
+                return;
+            }
             displayWeather(data);
+            weatherLoaded = true;
         })
         .catch(error => {
-            console.error('Error fetching current weather data:', error);
-            alert('Error fetching current weather data. Please try again.');
+            weatherInfoDiv.innerHTML = `<p>Error fetching weather data.</p>`;
         });
 
     fetch(forecastUrl)
         .then(response => response.json())
         .then(data => {
+            if (data.cod !== "200") return;
             displayHourlyForecast(data.list);
-        })
-        .catch(error => {
-            console.error('Error fetching hourly forecast data:', error);
-            alert('Error fetching hourly forecast data. Please try again.');
         });
 }
 
@@ -35,68 +64,71 @@ function displayWeather(data) {
     const tempDivInfo = document.getElementById('temp-div');
     const weatherInfoDiv = document.getElementById('weather-info');
     const weatherIcon = document.getElementById('weather-icon');
-    const hourlyForecastDiv = document.getElementById('hourly-forecast');
 
-    // Clear previous content
-    weatherInfoDiv.innerHTML = '';
-    hourlyForecastDiv.innerHTML = '';
-    tempDivInfo.innerHTML = '';
-    weatherIcon.style.display = 'none';
+    const cityName = `<strong>${data.name}, ${data.sys.country}</strong>`;
+    const temperature = Math.round(data.main.temp);
+    const description = data.weather[0].description;
+    const iconCode = data.weather[0].icon;
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    const feelsLike = data.main.feels_like;
+    const humidity = data.main.humidity;
+    const wind = data.wind.speed;
+    const visibility = data.visibility / 1000; // km
+    const dewPoint = calculateDewPoint(temperature, humidity);
 
-    if (data.cod === 404 || data.cod === '404') {
-        weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
-    } else {
-        const cityName = `<strong>${data.name}, ${data.sys.country}</strong>`;
-        const temperature = Math.round(data.main.temp);
-        const description = data.weather[0].description;
-        const iconCode = data.weather[0].icon;
-        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    tempDivInfo.innerHTML = `<p>${temperature}°C</p>`;
 
-        const temperatureHTML = `<p>${temperature}°C</p>`;
-        const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
+    weatherInfoDiv.innerHTML = `
+    <p>${cityName}</p>
+    <p>${description}</p>
+    <p><strong>Feels Like:</strong> ${Math.round(feelsLike)}°C</p>
+    <p><strong>Wind Speed:</strong> ${wind} m/s</p>
+    <p><strong>Humidity:</strong> ${humidity}%</p>
+    <p><strong>Dew Point:</strong> ${dewPoint}°C</p>
+    <p><strong>Visibility:</strong> ${visibility} km</p>
+  `;
 
-        tempDivInfo.innerHTML = temperatureHTML;
-        weatherInfoDiv.innerHTML = weatherHtml;
+    weatherIcon.onload = () => weatherIcon.style.display = 'block';
+    weatherIcon.onerror = () => weatherIcon.style.display = 'none';
+    weatherIcon.src = iconUrl;
+    weatherIcon.alt = description;
+}
 
-        weatherIcon.onload = () => {
-            weatherIcon.style.display = 'block';
-        };
-        weatherIcon.onerror = () => {
-            weatherIcon.style.display = 'none';
-        };
-        weatherIcon.src = iconUrl;
-        weatherIcon.alt = description;
-    }
+function calculateDewPoint(temp, humidity) {
+    const a = 17.27;
+    const b = 237.7;
+    const alpha = ((a * temp) / (b + temp)) + Math.log(humidity / 100);
+    const dewPoint = (b * alpha) / (a - alpha);
+    return Math.round(dewPoint);
 }
 
 function displayHourlyForecast(hourlyData) {
-    const hourlyForecastDiv = document.getElementById('hourly-forecast');
+    const hourlyForecastGrid = document.getElementById('hourly-forecast-grid');
+    hourlyForecastGrid.innerHTML = '';
 
-    const next24Hours = hourlyData.slice(0, 8); // Display 3-hour intervals (8 items = 24 hours)
-
+    const next24Hours = hourlyData.slice(0, 8);
     next24Hours.forEach(item => {
-        const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
+        const dateTime = new Date(item.dt * 1000);
         const hourLabel = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const temperature = Math.round(item.main.temp);
         const iconCode = item.weather[0].icon;
         const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
 
-        const hourlyItemHtml = `
-            <div class="hourly-item">
-                <span>${hourLabel}</span>
-                <img src="${iconUrl}" alt="Hourly Weather Icon">
-                <span>${temperature}°C</span>
-            </div>
+        const hourlyItem = document.createElement('div');
+        hourlyItem.classList.add('hourly-grid-item');
+        hourlyItem.innerHTML = `
+            <span>${hourLabel}</span><br>
+            <img src="${iconUrl}" alt="Icon"><br>
+            <span>${temperature}°C</span>
         `;
 
-        hourlyForecastDiv.innerHTML += hourlyItemHtml;
+        hourlyForecastGrid.appendChild(hourlyItem);
     });
 }
 
+// City Suggestions Feature
 const cityInput = document.getElementById('city');
 const suggestionsList = document.getElementById('city-suggestions');
-const apiKey = 'de67f813ac1a6ddb5fb9f4d60bce1d41'; // your existing OpenWeather API key
-
 let debounceTimeout;
 
 cityInput.addEventListener('input', function () {
@@ -118,31 +150,6 @@ cityInput.addEventListener('input', function () {
                     option.value = `${location.name}, ${location.country}`;
                     suggestionsList.appendChild(option);
                 });
-            })
-            .catch(err => {
-                console.error('Error fetching city suggestions:', err);
             });
     }, 300);
-});
-
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-
-function updateThemeText() {
-  const isDark = document.body.classList.contains('dark-mode');
-  themeToggleBtn.textContent = isDark ? '☀️ Light' : '🌑 Dark';
-}
-
-themeToggleBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-  localStorage.setItem('theme', theme);
-  updateThemeText();
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-  }
-  updateThemeText();
 });
