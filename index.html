@@ -7,18 +7,22 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-        <div class="theme-toggle" id="theme-toggle-btn">🌑 Dark</div>
-
-    <div id="weather-container">
-        <h2>AccuWeather🌤️</h2>
-        <input type="text" id="city" placeholder="Enter a city name" list="city-suggestions">
-        <datalist id="city-suggestions"></datalist>
-        <button onclick="getWeather()">Get Weather</button>
-        <img id="weather-icon" alt="Weather Icon">
-        
-        <div id="temp-div"></div>
-        <div id="weather-info"></div>
-        <div id="hourly-forecast"></div>
+    <div class="flip-container">
+        <div class="flipper">
+            <div class="front" id="weather-container">
+                <h2>AccuWeather🌤️</h2>
+                <input type="text" id="city" placeholder="Enter a city name" list="city-suggestions">
+                <datalist id="city-suggestions"></datalist>
+                <button onclick="getWeather()">Get Weather</button>
+                <img id="weather-icon" alt="Weather Icon">
+                <div id="temp-div"></div>
+                <div id="weather-info"></div>
+            </div>
+            <div class="back">
+                <h3>Hourly Forecast</h3>
+                <div id="hourly-forecast-grid"></div>
+            </div>
+        </div>
     </div>
     <script src="./script.js"></script>
 </body>
