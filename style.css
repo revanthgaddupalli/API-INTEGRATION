@@ -85,7 +85,7 @@ button:active {
 
 .flip-container {
   perspective: 1000px;
-  width: 350px;
+  width: 100vw;
   height: auto;
   position: relative;
 }
