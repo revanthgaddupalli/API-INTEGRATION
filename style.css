@@ -88,6 +88,9 @@ button:active {
   width: 100vw;
   height: auto;
   position: relative;
+display:flex;
+align-items:center;
+justify-content:center;
 
 }
 
@@ -97,7 +100,7 @@ button:active {
   min-height: 675px;
   transform-style: preserve-3d;
   transition: transform 0.8s ease-in-out;
- margin:20px;
+
 }
 
 .flipped .flipper {
