@@ -1,19 +1,7 @@
 const apiKey = 'de67f813ac1a6ddb5fb9f4d60bce1d41';
-let weatherLoaded = false;
 
 window.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') 
-        getWeather();
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('.flip-container');
-    container.addEventListener('click', function (e) {
-        const target = e.target;
-        if (target.tagName === 'INPUT' || target.tagName === 'BUTTON') return;
-        if (!weatherLoaded) return;
-        container.classList.toggle('flipped');
-    });
+    if (e.key === 'Enter') getWeather();
 });
 
 function getWeather() {
@@ -21,14 +9,20 @@ function getWeather() {
     const tempDivInfo = document.getElementById('temp-div');
     const weatherInfoDiv = document.getElementById('weather-info');
     const weatherIcon = document.getElementById('weather-icon');
-    const hourlyForecastGrid = document.getElementById('hourly-forecast-grid');
+    const hourlyForecastDiv = document.getElementById('hourly-forecast');
+    const dailyForecastDiv = document.getElementById('daily-forecast');
+
+    const hourlySection = document.getElementById('hourly-forecast-section');
+    const dailySection = document.getElementById('daily-forecast-section');
 
     // Clear previous data
+    hourlySection.style.display = 'none';
+    dailySection.style.display = 'none';
     tempDivInfo.innerHTML = '';
     weatherInfoDiv.innerHTML = '';
     weatherIcon.style.display = 'none';
-    hourlyForecastGrid.innerHTML = '';
-    weatherLoaded = false;
+    hourlyForecastDiv.innerHTML = '';
+    dailyForecastDiv.innerHTML = '';
 
     if (!city) {
         weatherInfoDiv.innerHTML = `<p>Please enter a city name.</p>`;
@@ -46,52 +40,22 @@ function getWeather() {
                 return;
             }
             displayWeather(data);
-            weatherLoaded = true;
         })
-        .catch(error => {
+        .catch(() => {
             weatherInfoDiv.innerHTML = `<p>Error fetching weather data.</p>`;
         });
 
     fetch(forecastUrl)
         .then(response => response.json())
         .then(data => {
-            if (data.cod !== "200") return;
-            displayHourlyForecast(data.list);
+            if (data.cod === "200") {
+                displayHourlyForecast(data.list);
+                displayDailyForecast(data.list);
+
+                hourlySection.style.display = 'block';
+                dailySection.style.display = 'block';
+            }
         });
-}
-
-function displayWeather(data) {
-    const tempDivInfo = document.getElementById('temp-div');
-    const weatherInfoDiv = document.getElementById('weather-info');
-    const weatherIcon = document.getElementById('weather-icon');
-
-    const cityName = `<strong>${data.name}, ${data.sys.country}</strong>`;
-    const temperature = Math.round(data.main.temp);
-    const description = data.weather[0].description;
-    const iconCode = data.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
-    const feelsLike = data.main.feels_like;
-    const humidity = data.main.humidity;
-    const wind = data.wind.speed;
-    const visibility = data.visibility / 1000; // km
-    const dewPoint = calculateDewPoint(temperature, humidity);
-
-    tempDivInfo.innerHTML = `<p>${temperature}°C</p>`;
-
-    weatherInfoDiv.innerHTML = `
-    <p>${cityName}</p>
-    <p>${description}</p>
-    <p><strong>Feels Like:</strong> ${Math.round(feelsLike)}°C</p>
-    <p><strong>Wind Speed:</strong> ${wind} m/s</p>
-    <p><strong>Humidity:</strong> ${humidity}%</p>
-    <p><strong>Dew Point:</strong> ${dewPoint}°C</p>
-    <p><strong>Visibility:</strong> ${visibility} km</p>
-  `;
-
-    weatherIcon.onload = () => weatherIcon.style.display = 'block';
-    weatherIcon.onerror = () => weatherIcon.style.display = 'none';
-    weatherIcon.src = iconUrl;
-    weatherIcon.alt = description;
 }
 
 function calculateDewPoint(temp, humidity) {
@@ -102,9 +66,43 @@ function calculateDewPoint(temp, humidity) {
     return Math.round(dewPoint);
 }
 
+function displayWeather(data) {
+    const tempDivInfo = document.getElementById('temp-div');
+    const weatherInfoDiv = document.getElementById('weather-info');
+    const weatherIcon = document.getElementById('weather-icon');
+
+    const cityName = `${data.name}, ${data.sys.country}`;
+    const temperature = Math.round(data.main.temp);
+    const feelsLike = Math.round(data.main.feels_like);
+    const humidity = data.main.humidity;
+    const windSpeed = data.wind.speed;
+    const visibility = data.visibility / 1000; // km
+    const dewPoint = calculateDewPoint(temperature, humidity);
+    const description = data.weather[0].description;
+    const iconCode = data.weather[0].icon;
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+
+    tempDivInfo.innerHTML = `<p>${temperature}°C</p>`;
+
+    weatherInfoDiv.innerHTML = `
+        <p><strong>${cityName}</strong></p>
+        <p>${description}</p>
+        <p><strong>Feels Like:</strong> ${feelsLike}°C</p>
+        <p><strong>Wind Speed:</strong> ${windSpeed} m/s</p>
+        <p><strong>Humidity:</strong> ${humidity}%</p>
+        <p><strong>Dew Point:</strong> ${dewPoint}°C</p>
+        <p><strong>Visibility:</strong> ${visibility.toFixed(1)} km</p>
+    `;
+
+    weatherIcon.src = iconUrl;
+    weatherIcon.alt = description;
+    weatherIcon.onload = () => weatherIcon.style.display = 'block';
+    weatherIcon.onerror = () => weatherIcon.style.display = 'none';
+}
+
 function displayHourlyForecast(hourlyData) {
-    const hourlyForecastGrid = document.getElementById('hourly-forecast-grid');
-    hourlyForecastGrid.innerHTML = '';
+    const hourlyForecastDiv = document.getElementById('hourly-forecast');
+    hourlyForecastDiv.innerHTML = '';
 
     const next24Hours = hourlyData.slice(0, 8);
     next24Hours.forEach(item => {
@@ -115,18 +113,60 @@ function displayHourlyForecast(hourlyData) {
         const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
 
         const hourlyItem = document.createElement('div');
-        hourlyItem.classList.add('hourly-grid-item');
+        hourlyItem.classList.add('hourly-item');
         hourlyItem.innerHTML = `
-            <span>${hourLabel}</span><br>
-            <img src="${iconUrl}" alt="Icon"><br>
+            <span>${hourLabel}</span>
+            <img src="${iconUrl}" alt="Icon">
             <span>${temperature}°C</span>
         `;
-
-        hourlyForecastGrid.appendChild(hourlyItem);
+        hourlyForecastDiv.appendChild(hourlyItem);
     });
 }
 
-// City Suggestions Feature
+function displayDailyForecast(hourlyData) {
+    const dailyForecastDiv = document.getElementById('daily-forecast');
+    dailyForecastDiv.innerHTML = ''; // Clear previous forecast
+
+    const groupedDays = {};
+
+    // Group data points by date
+    hourlyData.forEach(item => {
+        const date = new Date(item.dt * 1000).toISOString().split('T')[0];
+        if (!groupedDays[date]) {
+            groupedDays[date] = [];
+        }
+        groupedDays[date].push(item);
+    });
+
+    // Get only the first 6 days
+    const dayKeys = Object.keys(groupedDays).slice(0, 6);
+
+    dayKeys.forEach(date => {
+        const dayItems = groupedDays[date];
+        const temps = dayItems.map(d => d.main.temp);
+        const avgTemp = Math.round(temps.reduce((a, b) => a + b, 0) / temps.length);
+
+        const iconCode = dayItems[0].weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+        const dayName = new Date(date).toLocaleDateString(undefined, {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric'
+        });
+
+        const dayDiv = document.createElement('div');
+        dayDiv.classList.add('daily-item');
+        dayDiv.innerHTML = `
+            <span>${dayName}</span>
+            <img src="${iconUrl}" alt="Icon">
+            <span>${avgTemp}°C</span>
+        `;
+        dailyForecastDiv.appendChild(dayDiv);
+    });
+}
+
+// City Suggestions
 const cityInput = document.getElementById('city');
 const suggestionsList = document.getElementById('city-suggestions');
 let debounceTimeout;
