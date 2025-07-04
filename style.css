@@ -92,7 +92,7 @@ button:active {
 }
 
 .flipper {
-  width: 90%;
+  width: 60%;
   height: auto;
   min-height: 675px;
   transform-style: preserve-3d;
