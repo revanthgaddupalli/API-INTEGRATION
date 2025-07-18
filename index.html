@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AccuWeather - Home</title>
+    <title>Weather App</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <div id="weather-container">
         <h2>AccuWeather🌤️</h2>
-        <input type="text" id="city" placeholder="Enter a city name" list="city-suggestions">
+        <input type="text" id="city" placeholder="Enter a city name" list="city-suggestions" aria-label="City name">
         <datalist id="city-suggestions"></datalist>
-        <button onclick="getWeather()">Get Weather</button>
+        <button onclick="getWeather()" aria-label="Get weather data">Get Weather</button>
         <img id="weather-icon" alt="Weather Icon">
         <div id="temp-div"></div>
         <div id="weather-info"></div>
