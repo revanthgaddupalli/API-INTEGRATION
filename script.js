@@ -13,7 +13,7 @@ function getWeather() {
     const dailyForecastDiv = document.getElementById('daily-forecast');
     const hourlySection = document.getElementById('hourly-forecast-section');
     const dailySection = document.getElementById('daily-forecast-section');
-    
+
     hourlySection.style.display = 'none';
     dailySection.style.display = 'none';
     tempDivInfo.innerHTML = '';
@@ -33,7 +33,7 @@ function getWeather() {
     fetch(currentWeatherUrl)
         .then(response => response.json())
         .then(data => {
-            if (parseInt(data.cod) !== 200) {
+            if (data.cod === "200") {
                 weatherInfoDiv.innerHTML = `<p>${data.message || 'City not found'}</p>`;
                 return;
             }
@@ -45,7 +45,7 @@ function getWeather() {
     fetch(forecastUrl)
         .then(response => response.json())
         .then(data => {
-            if (parseInt(data.cod) === 200) {
+            if (data.cod === "200") {
                 displayHourlyForecast(data.list);
                 displayDailyForecast(data.list);
                 hourlySection.style.display = 'block';
