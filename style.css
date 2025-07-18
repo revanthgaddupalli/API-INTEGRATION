@@ -1,13 +1,14 @@
 :root {
-    --bg-color: #36454F;
-    --text-color: white;
-    --input-bg: #fff;
-    --input-text: #000;
-    --button-bg: white;
-    --button-text: black;
-    --container-bg: #20232a;
-    --container-border: #20232a;
-    --hourly-border-color: #ffffff4d;
+    --bg-color: #1c1f26;
+    --text-color: #f0f8ff;
+    --input-bg: #f5f7fa;
+    --input-text: #1c1f26;
+    --button-bg: #00bcd4;
+    --button-text: #ffffff;
+    --button-hover: #00acc1;
+    --container-bg: #2b2f3a;
+    --container-border: #3e4451;
+    --hourly-border-color: #ffffff33;
 }
 
 body {
@@ -66,6 +67,11 @@ button:active {
     box-shadow: 0 0 8px #20232a;
 }
 
+button:hover {
+    background-color: var(--button-hover);
+    color: white;
+}
+
 #weather-icon {
     width: 200px;
     height: 200px;
@@ -95,7 +101,6 @@ button:active {
     margin-top: 40px;
 }
 
-/* Forecast Heading (Title) */
 #hourly-forecast-section h3,
 #daily-forecast-section h3 {
     text-align: center;
@@ -123,7 +128,6 @@ button:active {
     text-align: center;
 }
 
-/* Forecast Grid Card Styles */
 .hourly-item,
 .daily-item {
     background: var(--container-bg);
@@ -136,7 +140,6 @@ button:active {
     height: 110px;
 }
 
-/* Forecast Icons */
 .hourly-item img,
 .daily-item img {
     width: 50px;
@@ -144,7 +147,6 @@ button:active {
     margin: 5px 0;
 }
 
-/* Text Inside Cards */
 .hourly-item span {
     display: block;
     font-size: 18px;
